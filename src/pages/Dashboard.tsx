@@ -28,7 +28,7 @@ export default function Dashboard() {
   // Handle Admin Dashboard view
   if (auth.role === 'admin') {
     return (
-      <div className="space-y-6 select-none pb-12">
+      <div className="space-y-6 pb-12">
         {/* Page Header Welcome */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -295,7 +295,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-6 select-none pb-12">
+    <div className="space-y-6 pb-12">
       {/* Page Header Welcome */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

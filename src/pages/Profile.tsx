@@ -62,7 +62,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="space-y-6 select-none pb-12">
+    <div className="space-y-6 pb-12">
       {/* Header section */}
       <div>
         <span className="text-xs font-mono text-cyan-500 uppercase tracking-widest">Portal Settings</span>

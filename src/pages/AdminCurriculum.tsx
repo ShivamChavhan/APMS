@@ -230,7 +230,7 @@ export default function AdminCurriculum() {
   };
 
   return (
-    <div className="space-y-6 select-none pb-12">
+    <div className="space-y-6 pb-12">
       {/* Page Header */}
       <div>
         <span className="text-xs font-mono text-cyan-500 uppercase tracking-widest">Syllabus & Timetables</span>

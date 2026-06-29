@@ -82,7 +82,7 @@ export default function Results() {
   }));
 
   return (
-    <div className="space-y-6 select-none pb-12">
+    <div className="space-y-6 pb-12">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

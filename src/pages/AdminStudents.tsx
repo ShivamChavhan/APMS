@@ -177,7 +177,7 @@ export default function AdminStudents() {
     : 85;
 
   return (
-    <div className="space-y-6 pb-12 select-none">
+    <div className="space-y-6 pb-12">
       {/* Success/Error Toast notification */}
       <AnimatePresence>
         {successMsg && (
