@@ -21,6 +21,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import AdminAcademic from './pages/AdminAcademic';
 import AdminCurriculum from './pages/AdminCurriculum';
 import AdminSchedules from './pages/AdminSchedules';
+import AdminStudents from './pages/AdminStudents';
 
 // Guard to protect portal pages
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: ('student' | 'admin')[] }) {
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/admin-academic" element={<ProtectedRoute allowedRoles={['admin']}><AdminAcademic /></ProtectedRoute>} />
           <Route path="/admin-curriculum" element={<ProtectedRoute allowedRoles={['admin']}><AdminCurriculum /></ProtectedRoute>} />
           <Route path="/admin-schedules" element={<ProtectedRoute allowedRoles={['admin']}><AdminSchedules /></ProtectedRoute>} />
+          <Route path="/admin-students" element={<ProtectedRoute allowedRoles={['admin']}><AdminStudents /></ProtectedRoute>} />
 
           {/* Fallback wildcard redirection */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -20,7 +20,7 @@ interface RegisterForm {
 export default function Register() {
   const { register: registerUser, departments, semesters, divisions, batches, fetchAdminData } = useAPMS();
   const navigate = useNavigate();
-  const [activeRole, setActiveRole] = useState<'student' | 'admin'>('student');
+  const activeRole = 'student';
 
   useEffect(() => {
     fetchAdminData();
@@ -67,30 +67,8 @@ export default function Register() {
           <div className="inline-flex w-14 h-14 rounded-2xl bg-cyan-500 flex items-center justify-center font-display font-bold text-slate-950 text-2xl shadow-lg shadow-cyan-500/20 mb-3">
             A
           </div>
-          <h2 className="font-display font-bold text-2xl text-slate-100 tracking-tight glow-text">Create APMS Account</h2>
+          <h2 className="font-display font-bold text-2xl text-slate-100 tracking-tight glow-text">Create APMS Student Account</h2>
           <p className="text-sm text-slate-400 mt-1.5">Register your attendance & performance profile</p>
-        </div>
-
-        {/* Role Selector Tabs */}
-        <div className="flex bg-slate-900/60 p-1.5 rounded-xl border border-slate-850 mb-6 max-w-sm mx-auto">
-          <button
-            type="button"
-            onClick={() => setActiveRole('student')}
-            className={`flex-1 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-lg transition-all ${
-              activeRole === 'student' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Student Sign-up
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveRole('admin')}
-            className={`flex-1 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-lg transition-all ${
-              activeRole === 'admin' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Admin Sign-up
-          </button>
         </div>
 
         <div className="glass-panel p-8 rounded-2xl shadow-xl border border-slate-800">

@@ -22,6 +22,7 @@ const STUDENT_MENU_ITEMS = [
 
 const ADMIN_MENU_ITEMS = [
   { path: '/', label: 'Admin Stats', icon: LayoutDashboard },
+  { path: '/admin-students', label: 'Students List', icon: Users },
   { path: '/admin-academic', label: 'Academic Setup', icon: Layers },
   { path: '/admin-curriculum', label: 'Curriculum & PDF', icon: BookOpen },
   { path: '/admin-schedules', label: 'Schedules & Exams', icon: Calendar },

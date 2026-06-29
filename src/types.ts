@@ -61,6 +61,25 @@ export interface UserProfile {
   batchName?: string;
 }
 
+export interface AdminStudent {
+  id: string;
+  name: string;
+  email: string;
+  rollNumber: string;
+  departmentId: string;
+  departmentName: string;
+  semesterId: string;
+  semesterName: string;
+  divisionId: string;
+  divisionName: string;
+  batchId: string;
+  batchName: string;
+  registeredAt: string;
+  accountStatus: 'active' | 'inactive';
+  attendancePercent: number;
+  cgpa: number;
+}
+
 export interface Subject {
   id: string;
   name: string;

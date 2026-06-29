@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   APMSData, Subject, AttendanceRecord, TimetableSlot, 
   Assignment, Exam, AcademicEvent, SemesterResult, UserProfile, AttendanceStatus,
-  Department, AcademicSemester, Division, Batch, Faculty
+  Department, AcademicSemester, Division, Batch, Faculty, AdminStudent
 } from '../types';
 
 interface AuthState {
@@ -139,6 +139,13 @@ interface APMSContextType {
     classesCanMiss: number;
   };
   getCGPA: () => number;
+
+  // Student Management State & Ops
+  adminStudents: AdminStudent[];
+  fetchAdminStudents: () => Promise<void>;
+  updateAdminStudent: (id: string, payload: Partial<AdminStudent>) => Promise<boolean>;
+  resetStudentPassword: (id: string, passwordHash: string) => Promise<boolean>;
+  deleteStudent: (id: string) => Promise<boolean>;
 }
 
 const APMSContext = createContext<APMSContextType | undefined>(undefined);
@@ -169,6 +176,7 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
 
   // Admin specific lists
   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
+  const [adminStudents, setAdminStudents] = useState<AdminStudent[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [semesters, setSemesters] = useState<AcademicSemester[]>([]);
   const [divisions, setDivisions] = useState<Division[]>([]);
@@ -204,9 +212,20 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Load admin data lists
+  const fetchAdminStudents = async () => {
+    try {
+      const res = await fetch("/api/admin/students");
+      if (res.ok) {
+        setAdminStudents(await res.json());
+      }
+    } catch (err) {
+      console.error("Failed to fetch admin students:", err);
+    }
+  };
+
   const fetchAdminData = async () => {
     try {
-      const [statsRes, deptsRes, semsRes, divsRes, batsRes, facsRes, subsRes, ttRes, exRes, evRes] = await Promise.all([
+      const [statsRes, deptsRes, semsRes, divsRes, batsRes, facsRes, subsRes, ttRes, exRes, evRes, studsRes] = await Promise.all([
         fetch("/api/admin/stats"),
         fetch("/api/admin/departments"),
         fetch("/api/admin/semesters"),
@@ -216,7 +235,8 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
         fetch("/api/admin/subjects"),
         fetch("/api/admin/timetable"),
         fetch("/api/admin/exams"),
-        fetch("/api/admin/calendar")
+        fetch("/api/admin/calendar"),
+        fetch("/api/admin/students")
       ]);
 
       if (statsRes.ok) setAdminStats(await statsRes.json());
@@ -229,6 +249,7 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
       if (ttRes.ok) setAllTimetableSlots(await ttRes.json());
       if (exRes.ok) setAllExams(await exRes.json());
       if (evRes.ok) setAllEvents(await evRes.json());
+      if (studsRes.ok) setAdminStudents(await studsRes.json());
     } catch (err) {
       console.error("Failed to load admin lists:", err);
     }
@@ -566,6 +587,56 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
     if (res.ok) fetchAdminData();
   };
 
+  const updateAdminStudent = async (id: string, payload: Partial<AdminStudent>): Promise<boolean> => {
+    try {
+      const res = await fetch(`/api/admin/students/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        fetchAdminStudents();
+        fetchAdminData();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error("Failed to update student:", err);
+      return false;
+    }
+  };
+
+  const resetStudentPassword = async (id: string, passwordHash: string): Promise<boolean> => {
+    try {
+      const res = await fetch(`/api/admin/students/${id}/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newPassword: passwordHash })
+      });
+      return res.ok;
+    } catch (err) {
+      console.error("Failed to reset student password:", err);
+      return false;
+    }
+  };
+
+  const deleteStudent = async (id: string): Promise<boolean> => {
+    try {
+      const res = await fetch(`/api/admin/students/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        fetchAdminStudents();
+        fetchAdminData();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error("Failed to delete student:", err);
+      return false;
+    }
+  };
+
   const addSubject = async (sub: { name: string; code: string; credit: number; facultyId: string; semesterId: string; isPractical: boolean; attendanceMinRequired: number }) => {
     const res = await fetch("/api/admin/subjects", {
       method: 'POST',
@@ -770,7 +841,13 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
       
       bulkImportAAP,
       getAttendanceStats,
-      getCGPA
+      getCGPA,
+
+      adminStudents,
+      fetchAdminStudents,
+      updateAdminStudent,
+      resetStudentPassword,
+      deleteStudent
     }}>
       {children}
     </APMSContext.Provider>

@@ -126,6 +126,8 @@ export interface DBStudentProfile {
   batchId?: string;
   rollNumber: string;
   avatarUrl?: string;
+  registeredAt?: string;
+  accountStatus?: 'active' | 'inactive';
 }
 
 export interface DBResult {
@@ -654,5 +656,28 @@ export class APMSDatabase {
       if (fields.batchId) profile.batchId = fields.batchId;
     }
     this.save();
+  }
+
+  public deleteStudent(userId: string): boolean {
+    const userIdx = this.schema.users.findIndex(u => u.id === userId);
+    if (userIdx === -1) return false;
+    
+    const user = this.schema.users[userIdx];
+    if (user.role !== 'student') return false;
+
+    // Remove user
+    this.schema.users.splice(userIdx, 1);
+
+    // Remove student profile
+    this.schema.studentProfiles = this.schema.studentProfiles.filter(p => p.userId !== userId);
+
+    // Remove academic data connected to userId
+    this.schema.attendance = this.schema.attendance.filter(a => a.studentId !== userId);
+    this.schema.results = this.schema.results.filter(r => r.studentId !== userId);
+    this.schema.assignments = this.schema.assignments.filter(a => a.studentId !== userId);
+    this.schema.marks = this.schema.marks.filter(m => m.studentId !== userId);
+
+    this.save();
+    return true;
   }
 }
