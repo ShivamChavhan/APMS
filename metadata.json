@@ -1,0 +1,6 @@
+{
+  "name": "APMS - Attendance & Performance Management System",
+  "description": "A comprehensive Personal Attendance & Performance Management System featuring automated AAP PDF upload extraction, attendance tracking, SGPA/CGPA credit calculators, assignments tracker, weekly timetables, exam countdowns, and academic performance analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

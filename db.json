@@ -1,0 +1,872 @@
+{
+  "users": [
+    {
+      "id": "u-admin",
+      "email": "admin@apms.edu",
+      "name": "Admin Professor",
+      "passwordHash": "password",
+      "role": "admin"
+    },
+    {
+      "id": "u-shivam",
+      "email": "shivamchavhan225@gmail.com",
+      "name": "Shivam Chavhan",
+      "passwordHash": "password",
+      "role": "student"
+    },
+    {
+      "id": "u-student",
+      "email": "student@apms.edu",
+      "name": "John Doe",
+      "passwordHash": "password",
+      "role": "student"
+    }
+  ],
+  "departments": [
+    {
+      "name": "Electronics & Telecommunications",
+      "code": "EXTC",
+      "id": "dept-1782632528683"
+    }
+  ],
+  "semesters": [
+    {
+      "name": "SEMESTER 3",
+      "departmentId": "dept-1782632528683",
+      "academicYear": "2026-27",
+      "attendanceRequirement": 75,
+      "id": "sem-1782632619193",
+      "published": true
+    }
+  ],
+  "divisions": [
+    {
+      "name": "Divison A",
+      "semesterId": "sem-1782632619193",
+      "id": "div-1782632710055"
+    },
+    {
+      "name": "Division B",
+      "semesterId": "sem-1782632619193",
+      "id": "div-1782632716642"
+    }
+  ],
+  "batches": [
+    {
+      "name": "B1",
+      "divisionId": "div-1782632710055",
+      "id": "batch-1782632750772"
+    },
+    {
+      "name": "B2",
+      "divisionId": "div-1782632710055",
+      "id": "batch-1782632755409"
+    },
+    {
+      "name": "B3",
+      "divisionId": "div-1782632710055",
+      "id": "batch-1782632761867"
+    },
+    {
+      "name": "B1",
+      "divisionId": "div-1782632716642",
+      "id": "batch-1782632769612"
+    },
+    {
+      "name": "B2",
+      "divisionId": "div-1782632716642",
+      "id": "batch-1782632775667"
+    },
+    {
+      "name": "B3",
+      "divisionId": "div-1782632716642",
+      "id": "batch-1782632780432"
+    }
+  ],
+  "faculty": [],
+  "subjects": [
+    {
+      "name": "Engineering Mathematics-III",
+      "code": "BSC06",
+      "credit": 3,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634429553"
+    },
+    {
+      "name": "Computer architecture and organization",
+      "code": "PCET108T",
+      "credit": 2,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634429961"
+    },
+    {
+      "name": "Computer architecture and organization lab",
+      "code": "PCET108P",
+      "credit": 1,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": true,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634430271"
+    },
+    {
+      "name": "Electronic Devices and Circuits",
+      "code": "PCET01T",
+      "credit": 2,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634430437"
+    },
+    {
+      "name": "Electronic Devices and Circuits Lab",
+      "code": "PCET01P",
+      "credit": 1,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": true,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634430717"
+    },
+    {
+      "name": "Network Theory and Transmission lines",
+      "code": "PCET101T",
+      "credit": 2,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634431201"
+    },
+    {
+      "name": "Network Theory and Transmission lines lab",
+      "code": "PCET101P",
+      "credit": 1,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": true,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634431404"
+    },
+    {
+      "name": "Skill Based Lab1",
+      "code": "VSEC05",
+      "credit": 1,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": true,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634431542"
+    },
+    {
+      "name": "Technical Communication",
+      "code": "AEC04",
+      "credit": 1,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634431662"
+    },
+    {
+      "name": "Design Thinking",
+      "code": "EEMC01",
+      "credit": 3,
+      "facultyId": "fac-1",
+      "semesterId": "sem-1782632619193",
+      "isPractical": false,
+      "attendanceMinRequired": 75,
+      "id": "sub-1782634431826"
+    }
+  ],
+  "timetable": [
+    {
+      "day": "Monday",
+      "subjectId": "sub-1782634429553",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "room": "D-201",
+      "facultyId": "",
+      "divisionId": "div-1782632710055",
+      "batchId": null,
+      "id": "tt-1782634748082"
+    }
+  ],
+  "academicCalendar": [
+    {
+      "id": "ev-1",
+      "title": "Midterm Exams (MSE)",
+      "date": "2026-07-01",
+      "type": "exam",
+      "description": "Mid-semester evaluation written exams.",
+      "semesterId": "sem-cs-5"
+    },
+    {
+      "id": "ev-2",
+      "title": "Practical Labs Assessment",
+      "date": "2026-07-12",
+      "type": "practical",
+      "description": "Final practical session evaluation and external viva voce.",
+      "semesterId": "sem-cs-5"
+    },
+    {
+      "id": "ev-3",
+      "title": "Independence Day Holiday",
+      "date": "2026-08-15",
+      "type": "holiday",
+      "description": "National Holiday.",
+      "semesterId": "sem-cs-5"
+    },
+    {
+      "id": "ev-4",
+      "title": "Tech-Fest 2026 (Syntra)",
+      "date": "2026-07-08",
+      "type": "event",
+      "description": "Annual department tech-fest and coding hackathon.",
+      "semesterId": "sem-cs-5"
+    }
+  ],
+  "exams": [],
+  "assignments": [],
+  "attendance": [],
+  "marks": [],
+  "studentProfiles": [
+    {
+      "id": "prof-shivam",
+      "userId": "u-shivam",
+      "departmentId": "dept-1782632528683",
+      "semesterId": "sem-1782632619193",
+      "divisionId": "div-1782632710055",
+      "batchId": "batch-1782632750772",
+      "rollNumber": "25104A0013",
+      "avatarUrl": ""
+    },
+    {
+      "id": "prof-student",
+      "userId": "u-student",
+      "departmentId": "dept-cs",
+      "semesterId": "sem-cs-5",
+      "divisionId": "div-cs-5-a",
+      "batchId": "batch-cs-5-a1",
+      "rollNumber": "CSE-2023-042",
+      "avatarUrl": ""
+    }
+  ],
+  "results": [
+    {
+      "id": "res-1",
+      "studentId": "u-student",
+      "semesterNo": 1,
+      "sgpa": 8.8,
+      "cgpa": 8.8,
+      "creditsEarned": 22,
+      "totalCredits": 22
+    },
+    {
+      "id": "res-2",
+      "studentId": "u-student",
+      "semesterNo": 2,
+      "sgpa": 8.95,
+      "cgpa": 8.88,
+      "creditsEarned": 24,
+      "totalCredits": 24
+    },
+    {
+      "id": "res-3",
+      "studentId": "u-student",
+      "semesterNo": 3,
+      "sgpa": 8.6,
+      "cgpa": 8.78,
+      "creditsEarned": 22,
+      "totalCredits": 22
+    },
+    {
+      "id": "res-4",
+      "studentId": "u-student",
+      "semesterNo": 4,
+      "sgpa": 9.12,
+      "cgpa": 8.86,
+      "creditsEarned": 20,
+      "totalCredits": 20
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "act-1782634654733",
+      "date": "2026-06-28T08:17:34.733Z",
+      "description": "Deleted Department with ID: dept-1782632594194",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634651907",
+      "date": "2026-06-28T08:17:31.907Z",
+      "description": "Deleted Department with ID: dept-1782632581594",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634647813",
+      "date": "2026-06-28T08:17:27.813Z",
+      "description": "Deleted Department with ID: dept-1782632546039",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634645009",
+      "date": "2026-06-28T08:17:25.009Z",
+      "description": "Deleted Department with ID: dept-1782632493687",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634551992",
+      "date": "2026-06-28T08:15:51.992Z",
+      "description": "Deleted Subject ID: sub-1782634434833",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634548375",
+      "date": "2026-06-28T08:15:48.375Z",
+      "description": "Deleted Subject ID: sub-1782634433832",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634544982",
+      "date": "2026-06-28T08:15:44.982Z",
+      "description": "Deleted Subject ID: sub-1782634433531",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634541113",
+      "date": "2026-06-28T08:15:41.113Z",
+      "description": "Deleted Subject ID: sub-1782634433162",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634538214",
+      "date": "2026-06-28T08:15:38.214Z",
+      "description": "Deleted Subject ID: sub-1782634432231",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634534774",
+      "date": "2026-06-28T08:15:34.774Z",
+      "description": "Deleted Subject ID: sub-1782634432084",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634532176",
+      "date": "2026-06-28T08:15:32.176Z",
+      "description": "Deleted Subject ID: sub-1782634431967",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634524992",
+      "date": "2026-06-28T08:15:24.992Z",
+      "description": "Deleted Subject ID: sub-1782634434214",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634522042",
+      "date": "2026-06-28T08:15:22.042Z",
+      "description": "Deleted Subject ID: sub-1782634436066",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634519829",
+      "date": "2026-06-28T08:15:19.829Z",
+      "description": "Deleted Subject ID: sub-1782634435023",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634516498",
+      "date": "2026-06-28T08:15:16.498Z",
+      "description": "Deleted Subject ID: sub-1782634436563",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634512005",
+      "date": "2026-06-28T08:15:12.005Z",
+      "description": "Deleted Subject ID: sub-1782634436991",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634509127",
+      "date": "2026-06-28T08:15:09.127Z",
+      "description": "Deleted Subject ID: sub-1782634437593",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634505220",
+      "date": "2026-06-28T08:15:05.220Z",
+      "description": "Deleted Subject ID: sub-1782634437441",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634501912",
+      "date": "2026-06-28T08:15:01.912Z",
+      "description": "Deleted Subject ID: sub-1782634437915",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634498074",
+      "date": "2026-06-28T08:14:58.074Z",
+      "description": "Deleted Subject ID: sub-1782634437736",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634494533",
+      "date": "2026-06-28T08:14:54.533Z",
+      "description": "Deleted Subject ID: sub-1782634438037",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634492598",
+      "date": "2026-06-28T08:14:52.598Z",
+      "description": "Deleted Subject ID: sub-1782634438162",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782634438162",
+      "date": "2026-06-28T08:13:58.162Z",
+      "description": "Created Subject: Computational Logic and Data Structures (MDMCS01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634438038",
+      "date": "2026-06-28T08:13:58.038Z",
+      "description": "Created Subject: Fundamentals of Robotics and Control (MDMRB01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634437916",
+      "date": "2026-06-28T08:13:57.916Z",
+      "description": "Created Subject: Introduction to Business Development and Marketing Principles (MDMBD01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634437737",
+      "date": "2026-06-28T08:13:57.737Z",
+      "description": "Created Subject: Foundations of Innovation and Entrepreneurship (MDMIE01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634437593",
+      "date": "2026-06-28T08:13:57.593Z",
+      "description": "Created Subject: Introduction to Bioinformatics (MDMBI01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634437442",
+      "date": "2026-06-28T08:13:57.442Z",
+      "description": "Created Subject: Seminar (MDM01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634436992",
+      "date": "2026-06-28T08:13:56.992Z",
+      "description": "Created Subject: CEP/FP course (CEP01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634436563",
+      "date": "2026-06-28T08:13:56.563Z",
+      "description": "Created Subject: Mini Project (PRJET45)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634436066",
+      "date": "2026-06-28T08:13:56.066Z",
+      "description": "Created Subject: Signals and Systems Lab (PCET100P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634435023",
+      "date": "2026-06-28T08:13:55.023Z",
+      "description": "Created Subject: Signals and Systems (PCET100T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634434834",
+      "date": "2026-06-28T08:13:54.834Z",
+      "description": "Created Subject: Principles of Communication Engineering Lab (PCET02P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634434214",
+      "date": "2026-06-28T08:13:54.214Z",
+      "description": "Created Subject: Principles of Communication Engineering (PCET02T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634433832",
+      "date": "2026-06-28T08:13:53.832Z",
+      "description": "Created Subject: Integrated Circuits Lab (PCET06P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634433531",
+      "date": "2026-06-28T08:13:53.531Z",
+      "description": "Created Subject: Integrated Circuits (PCET06T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634433162",
+      "date": "2026-06-28T08:13:53.162Z",
+      "description": "Created Subject: Microcontrollers Lab (PCET109P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634432231",
+      "date": "2026-06-28T08:13:52.231Z",
+      "description": "Created Subject: Microcontrollers (PCET109T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634432085",
+      "date": "2026-06-28T08:13:52.085Z",
+      "description": "Created Subject: Mathematical theory of Communication Lab (PCET106P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431967",
+      "date": "2026-06-28T08:13:51.967Z",
+      "description": "Created Subject: Mathematical theory of Communication (PCET106T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431827",
+      "date": "2026-06-28T08:13:51.827Z",
+      "description": "Created Subject: Design Thinking (EEMC01)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431662",
+      "date": "2026-06-28T08:13:51.662Z",
+      "description": "Created Subject: Technical Communication (AEC04)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431542",
+      "date": "2026-06-28T08:13:51.542Z",
+      "description": "Created Subject: Skill Based Lab1 (VSEC05)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431404",
+      "date": "2026-06-28T08:13:51.404Z",
+      "description": "Created Subject: Network Theory and Transmission lines lab (PCET101P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634431201",
+      "date": "2026-06-28T08:13:51.201Z",
+      "description": "Created Subject: Network Theory and Transmission lines (PCET101T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634430717",
+      "date": "2026-06-28T08:13:50.717Z",
+      "description": "Created Subject: Electronic Devices and Circuits Lab (PCET01P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634430437",
+      "date": "2026-06-28T08:13:50.437Z",
+      "description": "Created Subject: Electronic Devices and Circuits (PCET01T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634430271",
+      "date": "2026-06-28T08:13:50.271Z",
+      "description": "Created Subject: Computer architecture and organization lab (PCET108P)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634429961",
+      "date": "2026-06-28T08:13:49.961Z",
+      "description": "Created Subject: Computer architecture and organization (PCET108T)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782634429554",
+      "date": "2026-06-28T08:13:49.554Z",
+      "description": "Created Subject: Engineering Mathematics-III (BSC06)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632848174",
+      "date": "2026-06-28T07:47:28.174Z",
+      "description": "Created Batch B3 for Division div-1782632817179",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632840368",
+      "date": "2026-06-28T07:47:20.368Z",
+      "description": "Deleted Batch with ID: batch-1782632836458",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782632836458",
+      "date": "2026-06-28T07:47:16.458Z",
+      "description": "Created Batch B for Division div-1782632817179",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632829887",
+      "date": "2026-06-28T07:47:09.887Z",
+      "description": "Created Batch B2 for Division div-1782632817179",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632824253",
+      "date": "2026-06-28T07:47:04.253Z",
+      "description": "Created Batch B1 for Division div-1782632817179",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632817179",
+      "date": "2026-06-28T07:46:57.179Z",
+      "description": "Created Division Division B for Semester sem-1782632635664",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632796864",
+      "date": "2026-06-28T07:46:36.864Z",
+      "description": "Created Batch B3 for Division div-1782632729834",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632792754",
+      "date": "2026-06-28T07:46:32.754Z",
+      "description": "Created Batch B2 for Division div-1782632729834",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632788962",
+      "date": "2026-06-28T07:46:28.962Z",
+      "description": "Created Batch B1 for Division div-1782632729834",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632780433",
+      "date": "2026-06-28T07:46:20.433Z",
+      "description": "Created Batch B3 for Division div-1782632716642",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632775667",
+      "date": "2026-06-28T07:46:15.667Z",
+      "description": "Created Batch B2 for Division div-1782632716642",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632769612",
+      "date": "2026-06-28T07:46:09.612Z",
+      "description": "Created Batch B1 for Division div-1782632716642",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632761867",
+      "date": "2026-06-28T07:46:01.867Z",
+      "description": "Created Batch B3 for Division div-1782632710055",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632755409",
+      "date": "2026-06-28T07:45:55.409Z",
+      "description": "Created Batch B2 for Division div-1782632710055",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632750772",
+      "date": "2026-06-28T07:45:50.772Z",
+      "description": "Created Batch B1 for Division div-1782632710055",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632729835",
+      "date": "2026-06-28T07:45:29.835Z",
+      "description": "Created Division Division A for Semester sem-1782632635664",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632716643",
+      "date": "2026-06-28T07:45:16.643Z",
+      "description": "Created Division Division B for Semester sem-1782632619193",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632710055",
+      "date": "2026-06-28T07:45:10.055Z",
+      "description": "Created Division Divison A for Semester sem-1782632619193",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632685691",
+      "date": "2026-06-28T07:44:45.691Z",
+      "description": "Published SEMESTER 3 for Biomedical Engineering. Activated subjects & baselines for students.",
+      "type": "publish"
+    },
+    {
+      "id": "act-1782632683549",
+      "date": "2026-06-28T07:44:43.549Z",
+      "description": "Published SEMESTER 3 for Information Technology. Activated subjects & baselines for students.",
+      "type": "publish"
+    },
+    {
+      "id": "act-1782632681796",
+      "date": "2026-06-28T07:44:41.796Z",
+      "description": "Published SEMESTER 3 for Electronics & Computer Science. Activated subjects & baselines for students.",
+      "type": "publish"
+    },
+    {
+      "id": "act-1782632680228",
+      "date": "2026-06-28T07:44:40.228Z",
+      "description": "Published SEMESTER 3 for Computer Science & Engineering. Activated subjects & baselines for students.",
+      "type": "publish"
+    },
+    {
+      "id": "act-1782632677940",
+      "date": "2026-06-28T07:44:37.940Z",
+      "description": "Published SEMESTER 3 for Electronics & Telecommunications. Activated subjects & baselines for students.",
+      "type": "publish"
+    },
+    {
+      "id": "act-1782632671389",
+      "date": "2026-06-28T07:44:31.389Z",
+      "description": "Created Semester: SEMESTER 3 for Department dept-1782632594194",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632662265",
+      "date": "2026-06-28T07:44:22.265Z",
+      "description": "Created Semester: SEMESTER 3 for Department dept-1782632581594",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632650331",
+      "date": "2026-06-28T07:44:10.331Z",
+      "description": "Created Semester: SEMESTER 3 for Department dept-1782632546039",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632635664",
+      "date": "2026-06-28T07:43:55.664Z",
+      "description": "Created Semester: SEMESTER 3 for Department dept-1782632493687",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632619194",
+      "date": "2026-06-28T07:43:39.194Z",
+      "description": "Created Semester: SEMESTER 3 for Department dept-1782632528683",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632594194",
+      "date": "2026-06-28T07:43:14.194Z",
+      "description": "Created Department: Biomedical Engineering (BIOM)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632581594",
+      "date": "2026-06-28T07:43:01.594Z",
+      "description": "Created Department: Information Technology (IT)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632546040",
+      "date": "2026-06-28T07:42:26.040Z",
+      "description": "Created Department: Electronics & Computer Science (EXCS)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632528683",
+      "date": "2026-06-28T07:42:08.683Z",
+      "description": "Created Department: Electronics & Telecommunications (EXTC)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782632493687",
+      "date": "2026-06-28T07:41:33.687Z",
+      "description": "Created Department: Computer Science & Engineering (CSE)",
+      "type": "create"
+    },
+    {
+      "id": "act-1782631971133",
+      "date": "2026-06-28T07:32:51.133Z",
+      "description": "Deleted Department with ID: dept-me",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631967812",
+      "date": "2026-06-28T07:32:47.812Z",
+      "description": "Deleted Department with ID: dept-ee",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631965667",
+      "date": "2026-06-28T07:32:45.667Z",
+      "description": "Deleted Department with ID: dept-cs",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631757068",
+      "date": "2026-06-28T07:29:17.068Z",
+      "description": "Deleted Semester with ID: sem-cs-6",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631754721",
+      "date": "2026-06-28T07:29:14.721Z",
+      "description": "Deleted Semester with ID: sem-cs-5",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631525375",
+      "date": "2026-06-28T07:25:25.375Z",
+      "description": "Deleted Subject ID: sub-4",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631522905",
+      "date": "2026-06-28T07:25:22.905Z",
+      "description": "Deleted Subject ID: sub-3",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631519653",
+      "date": "2026-06-28T07:25:19.653Z",
+      "description": "Deleted Subject ID: sub-2",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631517191",
+      "date": "2026-06-28T07:25:17.191Z",
+      "description": "Deleted Subject ID: sub-1",
+      "type": "delete"
+    },
+    {
+      "id": "act-1782631514104",
+      "date": "2026-06-28T07:25:14.104Z",
+      "description": "Deleted Subject ID: sub-5",
+      "type": "delete"
+    },
+    {
+      "id": "act-1",
+      "date": "2026-06-27T10:00:00Z",
+      "description": "Admin published Semester 5 for Department Computer Science & Engineering",
+      "type": "publish"
+    },
+    {
+      "id": "act-2",
+      "date": "2026-06-27T12:00:00Z",
+      "description": "Registered student Shivam Chavhan in CSE",
+      "type": "register"
+    }
+  ]
+}
