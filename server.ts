@@ -29,6 +29,53 @@ async function startServer() {
     });
   }
 
+  const sessions: Record<string, string> = {}; // sessionToken -> userId
+
+  // --- SESSION AUTHORIZATION MIDDLEWARES ---
+
+  // Middleware to authenticate any request and verify the session token
+  const authenticateSession = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const token = req.headers["x-session-token"] as string;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized. Missing session token." });
+    }
+    const userId = sessions[token];
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized. Invalid or expired session." });
+    }
+    const user = db.getUsers().find(u => u.id === userId);
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized. User not found." });
+    }
+    // Attach user to request for use in handlers
+    (req as any).user = user;
+    next();
+  };
+
+  // Admin role check middleware
+  const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = (req as any).user;
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ error: "Access denied. Admin privileges required." });
+    }
+    next();
+  };
+
+  // Protect all /api/admin routes
+  app.use("/api/admin", authenticateSession, requireAdmin);
+
+  // Protect all /api/student routes
+  app.use("/api/student", authenticateSession, (req, res, next) => {
+    const user = (req as any).user;
+    if (user.role === 'student') {
+      // If there's a userId in the query, ensure it matches the logged-in student's ID
+      if (req.query.userId && req.query.userId !== user.id) {
+        return res.status(403).json({ error: "Access denied. You cannot access another user's data." });
+      }
+    }
+    next();
+  });
+
   // --- HEALTH CHECK ---
   app.get("/api/health", (req, res) => {
     res.json({ 
@@ -53,6 +100,9 @@ async function startServer() {
       return res.status(401).json({ error: "Invalid password." });
     }
 
+    const sessionToken = "session_" + Math.random().toString(36).substring(2) + "_" + Date.now();
+    sessions[sessionToken] = user.id;
+
     // Resolve full profile if student
     if (user.role === 'student') {
       const profile = db.getStudentProfiles().find(p => p.userId === user.id);
@@ -62,6 +112,7 @@ async function startServer() {
       const bat = db.getBatches().find(b => b.id === profile?.batchId);
 
       return res.json({
+        sessionToken,
         user: {
           id: user.id,
           email: user.email,
@@ -82,6 +133,7 @@ async function startServer() {
 
     // Admin response
     return res.json({
+      sessionToken,
       user: {
         id: user.id,
         email: user.email,

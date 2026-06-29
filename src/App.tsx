@@ -22,11 +22,14 @@ import AdminAcademic from './pages/AdminAcademic';
 import AdminCurriculum from './pages/AdminCurriculum';
 import AdminSchedules from './pages/AdminSchedules';
 
-// Guard to protect student portal pages
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+// Guard to protect portal pages
+function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: ('student' | 'admin')[] }) {
   const { auth } = useAPMS();
   if (!auth.isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+  if (allowedRoles && !allowedRoles.includes(auth.role)) {
+    return <Navigate to="/" replace />;
   }
   return <SidebarLayout>{children}</SidebarLayout>;
 }
@@ -43,19 +46,19 @@ export default function App() {
 
           {/* Protected portals */}
           <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
-          <Route path="/marks" element={<ProtectedRoute><Marks /></ProtectedRoute>} />
-          <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
-          <Route path="/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
-          <Route path="/assignments" element={<ProtectedRoute><Assignments /></ProtectedRoute>} />
-          <Route path="/exams" element={<ProtectedRoute><Exams /></ProtectedRoute>} />
-          <Route path="/calendar" element={<ProtectedRoute><AcademicCalendar /></ProtectedRoute>} />
+          <Route path="/attendance" element={<ProtectedRoute allowedRoles={['student']}><Attendance /></ProtectedRoute>} />
+          <Route path="/marks" element={<ProtectedRoute allowedRoles={['student']}><Marks /></ProtectedRoute>} />
+          <Route path="/results" element={<ProtectedRoute allowedRoles={['student']}><Results /></ProtectedRoute>} />
+          <Route path="/timetable" element={<ProtectedRoute allowedRoles={['student']}><Timetable /></ProtectedRoute>} />
+          <Route path="/assignments" element={<ProtectedRoute allowedRoles={['student']}><Assignments /></ProtectedRoute>} />
+          <Route path="/exams" element={<ProtectedRoute allowedRoles={['student']}><Exams /></ProtectedRoute>} />
+          <Route path="/calendar" element={<ProtectedRoute allowedRoles={['student']}><AcademicCalendar /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           
           {/* Admin dedicated routes */}
-          <Route path="/admin-academic" element={<ProtectedRoute><AdminAcademic /></ProtectedRoute>} />
-          <Route path="/admin-curriculum" element={<ProtectedRoute><AdminCurriculum /></ProtectedRoute>} />
-          <Route path="/admin-schedules" element={<ProtectedRoute><AdminSchedules /></ProtectedRoute>} />
+          <Route path="/admin-academic" element={<ProtectedRoute allowedRoles={['admin']}><AdminAcademic /></ProtectedRoute>} />
+          <Route path="/admin-curriculum" element={<ProtectedRoute allowedRoles={['admin']}><AdminCurriculum /></ProtectedRoute>} />
+          <Route path="/admin-schedules" element={<ProtectedRoute allowedRoles={['admin']}><AdminSchedules /></ProtectedRoute>} />
 
           {/* Fallback wildcard redirection */}
           <Route path="*" element={<Navigate to="/" replace />} />

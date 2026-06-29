@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAPMS } from '../context/APMSContext';
-import { Mail, Lock, LogIn, Sparkles, UserCheck, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, LogIn } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface LoginForm {
@@ -17,24 +17,14 @@ export default function Login() {
   
   const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<LoginForm>({
     defaultValues: {
-      email: "shivamchavhan225@gmail.com",
-      password: "password"
+      email: "",
+      password: ""
     }
   });
 
   const onSubmit = async (data: LoginForm) => {
     setLocalError(null);
-    const success = await login(data.email, data.password || "password");
-    if (success) {
-      navigate('/');
-    }
-  };
-
-  const loginAsDemo = async (email: string, pass: string) => {
-    setLocalError(null);
-    setValue('email', email);
-    setValue('password', pass);
-    const success = await login(email, pass);
+    const success = await login(data.email, data.password || "");
     if (success) {
       navigate('/');
     }
@@ -125,30 +115,6 @@ export default function Login() {
           <div className="text-center mt-6 border-t border-slate-800/80 pt-4">
             <span className="text-slate-400 text-xs">New student or admin? </span>
             <Link to="/register" className="text-cyan-500 text-xs font-semibold hover:underline">Register Account</Link>
-          </div>
-        </div>
-
-        {/* Rapid Access shortcuts */}
-        <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900 border border-slate-855 rounded-full mb-3">
-            <Sparkles size={11} className="text-cyan-500" />
-            <span className="text-[10px] text-slate-400 font-mono uppercase tracking-wider">Bypass Demo Access Panel</span>
-          </div>
-          <div className="flex gap-2 justify-center">
-            <button 
-              onClick={() => loginAsDemo("shivamchavhan225@gmail.com", "password")}
-              className="text-xs text-cyan-400/80 hover:text-cyan-400 hover:bg-cyan-500/10 px-3.5 py-2 border border-cyan-500/20 bg-slate-900/60 rounded-xl transition flex items-center gap-1.5"
-            >
-              <UserCheck size={14} />
-              <span>Student (Shivam)</span>
-            </button>
-            <button 
-              onClick={() => loginAsDemo("admin@apms.edu", "password")}
-              className="text-xs text-amber-400/80 hover:text-amber-400 hover:bg-amber-500/10 px-3.5 py-2 border border-amber-500/20 bg-slate-900/60 rounded-xl transition flex items-center gap-1.5"
-            >
-              <ShieldCheck size={14} />
-              <span>Admin Portal</span>
-            </button>
           </div>
         </div>
       </motion.div>

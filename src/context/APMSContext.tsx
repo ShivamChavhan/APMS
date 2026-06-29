@@ -11,7 +11,43 @@ interface AuthState {
   username: string | null;
   role: 'admin' | 'student';
   userId: string | null;
+  sessionToken?: string | null;
 }
+
+// Secure fetch wrapper that automatically appends session token and user email to all API requests
+const customFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  const saved = localStorage.getItem('apms_auth');
+  let token = '';
+  let email = '';
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.isAuthenticated) {
+        if (parsed.sessionToken) token = parsed.sessionToken;
+        if (parsed.userEmail) email = parsed.userEmail;
+      }
+    } catch (e) {}
+  }
+
+  const url = typeof input === 'string' ? input : (input instanceof Request ? input.url : '');
+  if (url.startsWith('/api/')) {
+    const headers = new Headers(init?.headers);
+    if (token && !headers.has('X-Session-Token')) {
+      headers.set('X-Session-Token', token);
+    }
+    if (email && !headers.has('X-User-Email')) {
+      headers.set('X-User-Email', email);
+    }
+    return window.fetch(input, {
+      ...init,
+      headers
+    });
+  }
+  return window.fetch(input, init);
+};
+
+// Shadow the global fetch within this file
+const fetch = customFetch;
 
 interface AdminStats {
   studentsCount: number;
@@ -117,7 +153,7 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
         // Fallback
       }
     }
-    return { isAuthenticated: false, userEmail: null, username: null, role: 'student', userId: null };
+    return { isAuthenticated: false, userEmail: null, username: null, role: 'student', userId: null, sessionToken: null };
   });
 
   const [data, setData] = useState<APMSData>({
@@ -225,13 +261,14 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
         throw new Error(errJson.error || "Login failed");
       }
 
-      const { user } = await response.json();
+      const { user, sessionToken } = await response.json();
       setAuth({
         isAuthenticated: true,
         userEmail: user.email,
         username: user.name,
         role: user.role,
-        userId: user.id
+        userId: user.id,
+        sessionToken: sessionToken
       });
       return true;
     } catch (err: any) {
@@ -282,7 +319,7 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
-    setAuth({ isAuthenticated: false, userEmail: null, username: null, role: 'student', userId: null });
+    setAuth({ isAuthenticated: false, userEmail: null, username: null, role: 'student', userId: null, sessionToken: null });
     setData({
       profile: { id: "", name: "", email: "", role: "student", rollNumber: "" },
       subjects: [],
