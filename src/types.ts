@@ -124,6 +124,7 @@ export interface TimetableSlot {
   facultyName?: string;
   divisionId: string;
   batchId?: string;
+  sessionType?: string;
 }
 
 export interface Assignment {

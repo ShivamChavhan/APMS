@@ -1,55 +1,80 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAPMS } from '../context/APMSContext';
 import { 
   User, Settings, Database, RefreshCw, CheckCircle, 
-  Trash2, Mail, Hash, ShieldAlert, Award
+  Trash2, Mail, Hash, ShieldAlert, Award, AlertCircle
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'motion/react';
-import { INITIAL_DATA } from '../initialData';
 
 interface ProfileFormInput {
   name: string;
   email: string;
-  department: string;
-  semester: string;
   rollNumber: string;
+  departmentId: string;
+  semesterId: string;
+  divisionId: string;
+  batchId: string;
 }
 
-const DEPARTMENTS = [
-  "Computer Science & Engineering",
-  "Information Technology",
-  "Electronics & Communication",
-  "Electrical & Electronics",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Chemical Engineering"
-];
-
-const SEMESTERS = [
-  "Semester 1", "Semester 2", "Semester 3", "Semester 4",
-  "Semester 5", "Semester 6", "Semester 7", "Semester 8"
-];
-
 export default function Profile() {
-  const { data, updateProfile, logout } = useAPMS();
+  const { data, updateProfile, departments, semesters, divisions, batches, fetchPublicAcademicData } = useAPMS();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormInput>({
+  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<ProfileFormInput>({
     defaultValues: {
-      name: data.profile.name,
-      email: data.profile.email,
-      department: data.profile.department,
-      semester: data.profile.semester,
-      rollNumber: data.profile.rollNumber
+      name: data.profile.name || '',
+      email: data.profile.email || '',
+      rollNumber: data.profile.rollNumber || '',
+      departmentId: data.profile.departmentId || '',
+      semesterId: data.profile.semesterId || '',
+      divisionId: data.profile.divisionId || '',
+      batchId: data.profile.batchId || '',
     }
   });
 
-  const onSubmit = (formData: ProfileFormInput) => {
-    updateProfile(formData);
-    setSuccessMsg("Academic profile updated successfully in the system database!");
-    setTimeout(() => setSuccessMsg(null), 3500);
+  // Fetch all metadata on mount (like in Register.tsx)
+  useEffect(() => {
+    fetchPublicAcademicData();
+  }, []);
+
+  // Update form values dynamically when data loads or updates
+  useEffect(() => {
+    if (data.profile) {
+      reset({
+        name: data.profile.name || '',
+        email: data.profile.email || '',
+        rollNumber: data.profile.rollNumber || '',
+        departmentId: data.profile.departmentId || '',
+        semesterId: data.profile.semesterId || '',
+        divisionId: data.profile.divisionId || '',
+        batchId: data.profile.batchId || '',
+      });
+    }
+  }, [data.profile, reset]);
+
+  const selectedDept = watch('departmentId');
+  const selectedSem = watch('semesterId');
+  const selectedDiv = watch('divisionId');
+
+  // Dynamically filter lists based on selections (matching Register.tsx nested cascades)
+  const filteredSemesters = semesters.filter(s => s.departmentId === selectedDept);
+  const filteredDivisions = divisions.filter(d => d.semesterId === selectedSem);
+  const filteredBatches = batches.filter(b => b.divisionId === selectedDiv);
+
+  const onSubmit = async (formData: ProfileFormInput) => {
+    setSuccessMsg(null);
+    setErrorMsg(null);
+    try {
+      await updateProfile(formData);
+      setSuccessMsg("Academic profile updated successfully in the system database!");
+      setTimeout(() => setSuccessMsg(null), 4000);
+    } catch (err: any) {
+      setErrorMsg(err.message || "Failed to update academic profile. Please try again.");
+      setTimeout(() => setErrorMsg(null), 5000);
+    }
   };
 
   const handleFullDatabaseReset = () => {
@@ -67,7 +92,7 @@ export default function Profile() {
       <div>
         <span className="text-xs font-mono text-cyan-500 uppercase tracking-widest">Portal Settings</span>
         <h1 className="font-display font-bold text-3xl text-slate-100 mt-1">Profile & Preferences</h1>
-        <p className="text-sm text-slate-400 mt-1">Manage roll identifications, modify semesters, check safety keys, and reset active databases</p>
+        <p className="text-sm text-slate-400 mt-1">Manage registration details, update active department streams, and synchronize academic setups</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -94,8 +119,11 @@ export default function Profile() {
                   type="text"
                   required
                   className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition"
-                  {...register('name', { required: true })}
+                  {...register('name', { required: 'Full student name is required' })}
                 />
+                {errors.name && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.name.message}</span>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Registered Email</label>
@@ -103,55 +131,141 @@ export default function Profile() {
                   type="email"
                   required
                   className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition"
-                  {...register('email', { required: true })}
+                  {...register('email', { 
+                    required: 'Email address is required',
+                    pattern: {
+                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                      message: 'Please enter a valid email address'
+                    }
+                  })}
                 />
+                {errors.email && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.email.message}</span>
+                )}
               </div>
             </div>
 
-            {/* Roll Number & Department & Semester */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Roll Number & Department */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Roll / Registration Number</label>
                 <input
                   type="text"
                   required
                   className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition uppercase"
-                  {...register('rollNumber', { required: true })}
+                  {...register('rollNumber', { required: 'Roll Number is required' })}
                 />
+                {errors.rollNumber && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.rollNumber.message}</span>
+                )}
               </div>
               
               <div>
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Department</label>
                 <select
                   className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition"
-                  {...register('department', { required: true })}
+                  {...register('departmentId', { required: 'Department is required' })}
                 >
-                  {DEPARTMENTS.map(d => (
-                    <option key={d} value={d} className="bg-slate-950">{d}</option>
+                  <option value="" className="bg-slate-950">-- Select Department --</option>
+                  {departments.map(d => (
+                    <option key={d.id} value={d.id} className="bg-slate-950">{d.name}</option>
                   ))}
                 </select>
+                {errors.departmentId && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.departmentId.message}</span>
+                )}
               </div>
+            </div>
 
+            {/* Semester, Division & Batch */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Active Semester</label>
                 <select
-                  className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition"
-                  {...register('semester', { required: true })}
+                  disabled={!selectedDept}
+                  className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  {...register('semesterId', { required: 'Semester is required' })}
                 >
-                  {SEMESTERS.map(s => (
-                    <option key={s} value={s} className="bg-slate-950">{s}</option>
+                  <option value="" className="bg-slate-950">-- Select Semester --</option>
+                  {filteredSemesters.map(s => (
+                    <option key={s.id} value={s.id} className="bg-slate-950">{s.name}</option>
                   ))}
                 </select>
+                {errors.semesterId && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.semesterId.message}</span>
+                )}
+                {selectedDept && filteredSemesters.length === 0 && (
+                  <span className="text-[10px] text-amber-500 mt-1 block font-mono">No active semesters found.</span>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Division</label>
+                <select
+                  disabled={!selectedSem}
+                  className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  {...register('divisionId', { required: 'Division is required' })}
+                >
+                  <option value="" className="bg-slate-950">-- Select Division --</option>
+                  {filteredDivisions.map(d => (
+                    <option key={d.id} value={d.id} className="bg-slate-950">{d.name}</option>
+                  ))}
+                </select>
+                {errors.divisionId && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.divisionId.message}</span>
+                )}
+                {selectedSem && filteredDivisions.length === 0 && (
+                  <span className="text-[10px] text-amber-500 mt-1 block font-mono">No divisions mapped.</span>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Practical Batch</label>
+                <select
+                  disabled={!selectedDiv}
+                  className="w-full bg-slate-900 border border-slate-800 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-slate-100 text-sm focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  {...register('batchId', { required: 'Batch is required' })}
+                >
+                  <option value="" className="bg-slate-950">-- Select Batch --</option>
+                  {filteredBatches.map(b => (
+                    <option key={b.id} value={b.id} className="bg-slate-950">{b.name}</option>
+                  ))}
+                </select>
+                {errors.batchId && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">{errors.batchId.message}</span>
+                )}
+                {selectedDiv && filteredBatches.length === 0 && (
+                  <span className="text-[10px] text-amber-500 mt-1 block font-mono">No active batches.</span>
+                )}
               </div>
             </div>
 
             {/* Notification logs */}
-            {successMsg && (
-              <div className="p-3.5 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-xs text-cyan-400 flex items-start gap-2.5">
-                <CheckCircle size={14} className="shrink-0 mt-0.5" />
-                <span>{successMsg}</span>
-              </div>
-            )}
+            <AnimatePresence>
+              {successMsg && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs text-emerald-400 flex items-start gap-2.5"
+                >
+                  <CheckCircle size={14} className="shrink-0 mt-0.5" />
+                  <span>{successMsg}</span>
+                </motion.div>
+              )}
+
+              {errorMsg && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-xs text-rose-400 flex items-start gap-2.5"
+                >
+                  <AlertCircle size={14} className="shrink-0 mt-0.5" />
+                  <span>{errorMsg}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="pt-4 border-t border-slate-800/80 flex justify-end">
               <button
@@ -168,7 +282,7 @@ export default function Profile() {
         {/* Preferences and Database recovery */}
         <div className="space-y-6">
           
-          {/* UI Preferences (Force Dark Mode styling details) */}
+          {/* UI Preferences */}
           <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">Portal Visuals</h3>
             <div className="space-y-2">

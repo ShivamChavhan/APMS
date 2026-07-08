@@ -101,6 +101,7 @@ interface APMSContextType {
   
   // Admin Operations
   fetchAdminData: () => Promise<void>;
+  fetchPublicAcademicData: () => Promise<void>;
   addDepartment: (dept: { name: string; code: string }) => Promise<void>;
   deleteDepartment: (id: string) => Promise<void>;
   addSemester: (sem: { name: string; departmentId: string; academicYear: string; attendanceRequirement: number }) => Promise<void>;
@@ -200,7 +201,12 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       const res = await fetch(`/api/student/dashboard-data?userId=${userId}`);
-      if (!res.ok) throw new Error("Failed to load dashboard data");
+      if (!res.ok) {
+        if (res.status === 401) {
+          logout();
+        }
+        throw new Error("Failed to load dashboard data");
+      }
       const result = await res.json();
       setData(result);
     } catch (err: any) {
@@ -215,6 +221,10 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
   const fetchAdminStudents = async () => {
     try {
       const res = await fetch("/api/admin/students");
+      if (res.status === 401) {
+        logout();
+        return;
+      }
       if (res.ok) {
         setAdminStudents(await res.json());
       }
@@ -223,14 +233,32 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const fetchPublicAcademicData = async () => {
+    try {
+      const [deptsRes, semsRes, divsRes, batsRes] = await Promise.all([
+        fetch("/api/public/departments"),
+        fetch("/api/public/semesters"),
+        fetch("/api/public/divisions"),
+        fetch("/api/public/batches")
+      ]);
+
+      if (deptsRes.ok) setDepartments(await deptsRes.json());
+      if (semsRes.ok) setSemesters(await semsRes.json());
+      if (divsRes.ok) setDivisions(await divsRes.json());
+      if (batsRes.ok) setBatches(await batsRes.json());
+    } catch (err) {
+      console.error("Failed to load public academic lists:", err);
+    }
+  };
+
   const fetchAdminData = async () => {
     try {
       const [statsRes, deptsRes, semsRes, divsRes, batsRes, facsRes, subsRes, ttRes, exRes, evRes, studsRes] = await Promise.all([
         fetch("/api/admin/stats"),
-        fetch("/api/admin/departments"),
-        fetch("/api/admin/semesters"),
-        fetch("/api/admin/divisions"),
-        fetch("/api/admin/batches"),
+        fetch("/api/public/departments"),
+        fetch("/api/public/semesters"),
+        fetch("/api/public/divisions"),
+        fetch("/api/public/batches"),
         fetch("/api/admin/faculty"),
         fetch("/api/admin/subjects"),
         fetch("/api/admin/timetable"),
@@ -238,6 +266,11 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
         fetch("/api/admin/calendar"),
         fetch("/api/admin/students")
       ]);
+
+      if (statsRes.status === 401) {
+        logout();
+        return;
+      }
 
       if (statsRes.ok) setAdminStats(await statsRes.json());
       if (deptsRes.ok) setDepartments(await deptsRes.json());
@@ -355,25 +388,26 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (profileUpdate: Partial<UserProfile>) => {
     if (!auth.userId) return;
-    try {
-      const res = await fetch('/api/student/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: auth.userId,
-          ...profileUpdate
-        })
-      });
-      if (res.ok) {
-        if (profileUpdate.name) {
-          setAuth(prev => ({ ...prev, username: profileUpdate.name! }));
-        }
-        if (auth.role === 'student') {
-          fetchStudentData(auth.userId);
-        }
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await fetch('/api/student/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: auth.userId,
+        ...profileUpdate
+      })
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || "Failed to update academic profile.");
+    }
+    if (profileUpdate.name) {
+      setAuth(prev => ({ ...prev, username: profileUpdate.name! }));
+    }
+    if (profileUpdate.email) {
+      setAuth(prev => ({ ...prev, userEmail: profileUpdate.email! }));
+    }
+    if (auth.role === 'student') {
+      await fetchStudentData(auth.userId);
     }
   };
 
@@ -815,6 +849,7 @@ export function APMSProvider({ children }: { children: React.ReactNode }) {
       allEvents,
       
       fetchAdminData,
+      fetchPublicAcademicData,
       addDepartment,
       deleteDepartment,
       addSemester,

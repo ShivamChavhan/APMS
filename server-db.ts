@@ -64,6 +64,7 @@ export interface DBTimetableSlot {
   facultyId: string;
   divisionId: string;
   batchId?: string | null;
+  sessionType?: string;
 }
 
 export interface DBAcademicEvent {
@@ -639,11 +640,12 @@ export class APMSDatabase {
     this.save();
   }
 
-  public updateProfile(userId: string, fields: { name?: string, avatarUrl?: string, rollNumber?: string, departmentId?: string, semesterId?: string, divisionId?: string, batchId?: string }) {
-    // Update user name
-    if (fields.name) {
-      const user = this.schema.users.find(u => u.id === userId);
-      if (user) user.name = fields.name;
+  public updateProfile(userId: string, fields: { name?: string, email?: string, avatarUrl?: string, rollNumber?: string, departmentId?: string, semesterId?: string, divisionId?: string, batchId?: string }) {
+    // Update user name and email
+    const user = this.schema.users.find(u => u.id === userId);
+    if (user) {
+      if (fields.name) user.name = fields.name;
+      if (fields.email) user.email = fields.email;
     }
     // Update student profile details
     const profile = this.schema.studentProfiles.find(p => p.userId === userId);

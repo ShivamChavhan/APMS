@@ -18,12 +18,12 @@ interface RegisterForm {
 }
 
 export default function Register() {
-  const { register: registerUser, departments, semesters, divisions, batches, fetchAdminData } = useAPMS();
+  const { register: registerUser, departments, semesters, divisions, batches, fetchPublicAcademicData } = useAPMS();
   const navigate = useNavigate();
   const activeRole = 'student';
 
   useEffect(() => {
-    fetchAdminData();
+    fetchPublicAcademicData();
   }, []);
 
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<RegisterForm>({

@@ -39,7 +39,28 @@ async function startServer() {
     if (!token) {
       return res.status(401).json({ error: "Unauthorized. Missing session token." });
     }
-    const userId = sessions[token];
+    let userId = sessions[token];
+    if (!userId && token.startsWith("session_")) {
+      const parts = token.split("_");
+      // Format 1: session_<userId>_<random>_<timestamp>
+      if (parts.length >= 4) {
+        const potentialUserId = parts[1];
+        const userExists = db.getUsers().some(u => u.id === potentialUserId);
+        if (userExists) {
+          userId = potentialUserId;
+          sessions[token] = userId; // Restore in-memory session
+        }
+      } else if (parts.length === 3) {
+        // Format 2: session_<userId>_<timestamp>
+        const potentialUserId = parts[1];
+        const userExists = db.getUsers().some(u => u.id === potentialUserId);
+        if (userExists) {
+          userId = potentialUserId;
+          sessions[token] = userId;
+        }
+      }
+    }
+
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized. Invalid or expired session." });
     }
@@ -100,7 +121,7 @@ async function startServer() {
       return res.status(401).json({ error: "Invalid password." });
     }
 
-    const sessionToken = "session_" + Math.random().toString(36).substring(2) + "_" + Date.now();
+    const sessionToken = "session_" + user.id + "_" + Math.random().toString(36).substring(2) + "_" + Date.now();
     sessions[sessionToken] = user.id;
 
     // Resolve full profile if student
@@ -142,6 +163,23 @@ async function startServer() {
         rollNumber: "ADMIN"
       }
     });
+  });
+
+  // --- PUBLIC ACADEMIC READS ---
+  app.get("/api/public/departments", (req, res) => {
+    res.json(db.getDepartments());
+  });
+
+  app.get("/api/public/semesters", (req, res) => {
+    res.json(db.getSemesters());
+  });
+
+  app.get("/api/public/divisions", (req, res) => {
+    res.json(db.getDivisions());
+  });
+
+  app.get("/api/public/batches", (req, res) => {
+    res.json(db.getBatches());
   });
 
   app.post("/api/auth/register", (req, res) => {
@@ -532,7 +570,7 @@ async function startServer() {
     res.json(db.getTimetable());
   });
   app.post("/api/admin/timetable", (req, res) => {
-    const { day, subjectId, startTime, endTime, room, facultyId, divisionId, batchId } = req.body;
+    const { day, subjectId, startTime, endTime, room, facultyId, divisionId, batchId, sessionType } = req.body;
     const slot = db.addTimetableSlot({
       day,
       subjectId,
@@ -541,7 +579,8 @@ async function startServer() {
       room,
       facultyId,
       divisionId,
-      batchId: batchId || null
+      batchId: batchId || null,
+      sessionType
     });
     res.json(slot);
   });
@@ -819,8 +858,40 @@ async function startServer() {
   });
 
   app.put("/api/student/profile", (req, res) => {
-    const { userId, name, avatarUrl, rollNumber, divisionId, batchId } = req.body;
-    db.updateProfile(userId, { name, avatarUrl, rollNumber, divisionId, batchId });
+    const { userId, name, email, avatarUrl, rollNumber, departmentId, semesterId, divisionId, batchId } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId in request body." });
+    }
+
+    if (!name || name.trim() === "") {
+      return res.status(400).json({ error: "Full Student Name cannot be empty." });
+    }
+
+    if (!email || email.trim() === "") {
+      return res.status(400).json({ error: "Registered Email cannot be empty." });
+    }
+
+    if (!rollNumber || rollNumber.trim() === "") {
+      return res.status(400).json({ error: "Roll / Registration Number cannot be empty." });
+    }
+
+    // Email uniqueness check
+    const existingUser = db.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase() && u.id !== userId);
+    if (existingUser) {
+      return res.status(400).json({ error: "Email address is already in use by another user account." });
+    }
+
+    db.updateProfile(userId, { 
+      name, 
+      email, 
+      avatarUrl, 
+      rollNumber, 
+      departmentId, 
+      semesterId, 
+      divisionId, 
+      batchId 
+    });
     res.json({ success: true });
   });
 
